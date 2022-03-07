@@ -11,17 +11,18 @@ app.get("/books",logger,(req,res)=>{
 
 
 app.get("/libraries",logger,checkPermission("librarian"),(req,res)=>{
-    return res.send({ route: "/libraries", permission: true})
+    return res.send({ route: "/libraries", permission: req.permission})
 })
 
 app.get("/authors",logger,checkPermission("author"),(req,res)=>{
-    return res.send({ route: "/authors", permission: true})
+    return res.send({ route: "/authors", permission: req.permission})
 })
 
 function checkPermission(role){
 
 return function logger(req,res,next){
     if(role==="librarian" || role==="author"){
+        req.permission=true;
         return next()
     }
     return res.send("Not Allowed")  
